@@ -1,9 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>
+			net472;
+			net481;
+			net6.0;
+			net7.0;
+			net8.0;
+			net9.0;
+		</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<LangVersion>10</LangVersion>
+
+		<!-- NuGet Package Metadata -->
+		<PackageId>SGS.OAD.Mail</PackageId>
+		<Version>24.12.0</Version>
+		<Authors>Brian</Authors>
+		<Company>SGS Taiwan Ltd.</Company>
+		<Description>SGS OAD Email Sender</Description>
+		<!--<PackageIcon>icon.png</PackageIcon>-->
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<ContentTargetFolders>content</ContentTargetFolders>
+		<PackageTags>SGS;OAD;Email;Library;Package;</PackageTags>
+		<PackageProjectUrl>http://twvoadtpw100004.apac.global.sgs.com/brian_li/SGS.OAD.Mail</PackageProjectUrl>
+		<RepositoryUrl>http://twvoadtpw100004.apac.global.sgs.com/brian_li/SGS.OAD.Mail.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageCopyright>Copyright © 2024 SGS Taiwan Ltd.</PackageCopyright>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!--<None Include="icon.png" Pack="true" PackagePath="\" />-->
+		<None Include="readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>
