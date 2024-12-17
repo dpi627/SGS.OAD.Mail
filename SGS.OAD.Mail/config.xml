@@ -3,14 +3,14 @@
   <!-- smtp -->
   <SMTP_HOST>smtp-apac.sgs.net</SMTP_HOST>
   <SMTP_PORT>25</SMTP_PORT>
-  <ENABLE_SSL>false</ENABLE_SSL>
-  <USERNAME></USERNAME>
-  <PASSWORD></PASSWORD>
+  <SMTP_ENABLE_SSL>false</SMTP_ENABLE_SSL>
+  <SMTP_USERNAME></SMTP_USERNAME>
+  <SMTP_PASSWORD></SMTP_PASSWORD>
   <!-- /smtp -->
   <!-- mail -->
-  <FROM>no-reply@sgs.com</FROM>
-  <SUBJECT>測試郵件</SUBJECT>
-  <BODY>這是一封測試郵件，請勿回覆。</BODY>
+  <MAIL_FROM>no-reply@sgs.com</MAIL_FROM>
+  <MAIL_SUBJECT>測試郵件</MAIL_SUBJECT>
+  <MAIL_BODY>這是一封測試郵件，請勿回覆。</MAIL_BODY>
   <!-- /mail -->
   <!-- message -->
   <MSG_SMTP>未設定 SMTP 伺服器</MSG_SMTP>
