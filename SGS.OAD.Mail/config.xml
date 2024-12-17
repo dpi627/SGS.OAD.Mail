@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AppSettings>
+  <!-- smtp -->
+  <SMTP_HOST>smtp-apac.sgs.net</SMTP_HOST>
+  <SMTP_PORT>25</SMTP_PORT>
+  <ENABLE_SSL>false</ENABLE_SSL>
+  <USERNAME></USERNAME>
+  <PASSWORD></PASSWORD>
+  <!-- /smtp -->
+  <!-- mail -->
+  <FROM>no-reply@sgs.com</FROM>
+  <SUBJECT>測試郵件</SUBJECT>
+  <BODY>這是一封測試郵件，請勿回覆。</BODY>
+  <!-- /mail -->
+  <!-- message -->
+  <MSG_SMTP>未設定 SMTP 伺服器</MSG_SMTP>
+  <MSG_FROM>未設定發件人</MSG_FROM>
+  <MSG_TO>未設定收件人</MSG_TO>
+  <MSG_SUBJECT>未設定郵件主題</MSG_SUBJECT>
+  <MSG_BODY>未設定郵件內容</MSG_BODY>
+  <!-- /message -->
+</AppSettings>

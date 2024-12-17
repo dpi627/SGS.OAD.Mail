@@ -18,11 +18,11 @@
 
 		<!-- NuGet Package Metadata -->
 		<PackageId>SGS.OAD.Mail</PackageId>
-		<Version>24.12.0</Version>
+		<Version>24.12.1</Version>
 		<Authors>Brian</Authors>
 		<Company>SGS Taiwan Ltd.</Company>
 		<Description>SGS OAD Email Sender</Description>
-		<!--<PackageIcon>icon.png</PackageIcon>-->
+		<PackageIcon>icon.png</PackageIcon>
 		<IncludeContentInPack>true</IncludeContentInPack>
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<PackageTags>SGS;OAD;Email;Library;Package;</PackageTags>
@@ -36,7 +36,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<None Include="icon.png" Pack="true" PackagePath="\" />-->
+	  <None Remove="config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="icon.png" Pack="true" PackagePath="\" />
 		<None Include="readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 

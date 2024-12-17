@@ -8,17 +8,17 @@ namespace SGS.OAD.Mail
     /// <summary>
     /// 郵件建構器
     /// </summary>
-    public class MailBuilder
+    public class Email
     {
-        // 郵件基本配置
-        private string _smtpHost;
-        private int _smtpPort = 587;
+        // SMTP 設定
+        private string _smtpHost = "smtp-apac.sgs.net";
+        private int _smtpPort = 25;
         private string _username;
         private string _password;
         private bool _enableSsl = true;
 
-        // 郵件內容配置
-        private string _fromEmail;
+        // 郵件相關設定
+        private string _fromEmail = "no-reply@sgs.com";
         private List<string> _toEmails = new List<string>();
         private List<string> _ccEmails = new List<string>();
         private List<string> _bccEmails = new List<string>();
@@ -28,13 +28,19 @@ namespace SGS.OAD.Mail
         private List<string> _attachmentPaths = new List<string>();
 
         /// <summary>
-        /// 配置 SMTP 伺服器
+        /// 創建郵件構建器的靜態方法
+        /// </summary>
+        public static Email Create() => new Email();
+
+
+        /// <summary>
+        /// 設定 SMTP
         /// </summary>
         /// <returns>FluentEmailBuilder</returns>
-        public MailBuilder UseSmtp(
+        public Email UseSmtp(
             string host,
-            int port = 587,
-            bool enableSsl = true)
+            int port,
+            bool enableSsl = false)
         {
             _smtpHost = host;
             _smtpPort = port;
@@ -45,7 +51,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定 SMTP 認證
         /// </summary>
-        public MailBuilder WithCredentials(string username, string password)
+        public Email WithCredentials(string username, string password)
         {
             _username = username;
             _password = password;
@@ -55,7 +61,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定發件人
         /// </summary>
-        public MailBuilder From(string email)
+        public Email From(string email)
         {
             _fromEmail = email;
             return this;
@@ -64,7 +70,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定收件人
         /// </summary>
-        public MailBuilder To(string email)
+        public Email To(string email)
         {
             _toEmails.Add(email);
             return this;
@@ -73,7 +79,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定多個收件人
         /// </summary>
-        public MailBuilder To(params string[] emails)
+        public Email To(params string[] emails)
         {
             _toEmails.AddRange(emails);
             return this;
@@ -82,7 +88,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定副本收件人
         /// </summary>
-        public MailBuilder Cc(string email)
+        public Email Cc(string email)
         {
             _ccEmails.Add(email);
             return this;
@@ -91,7 +97,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定多個副本收件人
         /// </summary>
-        public MailBuilder Cc(params string[] emails)
+        public Email Cc(params string[] emails)
         {
             _ccEmails.AddRange(emails);
             return this;
@@ -100,7 +106,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定密送收件人
         /// </summary>
-        public MailBuilder Bcc(string email)
+        public Email Bcc(string email)
         {
             _bccEmails.Add(email);
             return this;
@@ -109,7 +115,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定多個密送收件人
         /// </summary>
-        public MailBuilder Bcc(params string[] emails)
+        public Email Bcc(params string[] emails)
         {
             _bccEmails.AddRange(emails);
             return this;
@@ -118,7 +124,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定郵件主題
         /// </summary>
-        public MailBuilder Subject(string subject)
+        public Email Subject(string subject)
         {
             _subject = subject;
             return this;
@@ -127,7 +133,7 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定郵件內容
         /// </summary>
-        public MailBuilder Body(string body, bool isHtml = false)
+        public Email Body(string body, bool isHtml = false)
         {
             _body = body;
             _isHtmlBody = isHtml;
@@ -135,11 +141,22 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
-        /// 添加附件
+        /// 加入附件
         /// </summary>
-        public MailBuilder Attach(string filePath)
+        public Email Attach(string filePath)
         {
             _attachmentPaths.Add(filePath);
+            return this;
+        }
+
+        /// <summary>
+        /// 加入多個附件
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <returns></returns>
+        public Email Attach(params string[] filePaths)
+        {
+            _attachmentPaths.AddRange(filePaths);
             return this;
         }
 
@@ -193,7 +210,7 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
-        /// 創建 SMTP 客戶端
+        /// 建立 SMTP Client
         /// </summary>
         private SmtpClient CreateSmtpClient()
         {
@@ -212,7 +229,7 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
-        /// 創建郵件消息
+        /// 建立郵件本體
         /// </summary>
         private MailMessage CreateMailMessage()
         {
@@ -235,16 +252,5 @@ namespace SGS.OAD.Mail
 
             return mailMessage;
         }
-    }
-
-    /// <summary>
-    /// 郵件發送器的靜態入口
-    /// </summary>
-    public static class EmailSender
-    {
-        /// <summary>
-        /// 創建郵件構建器的靜態方法
-        /// </summary>
-        public static MailBuilder Create() => new MailBuilder();
     }
 }
