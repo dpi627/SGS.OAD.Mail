@@ -233,6 +233,7 @@ namespace SGS.OAD.Mail
 
         /// <summary>
         /// 建立並傳送郵件（非同步）
+        /// SMTP Clinet 是一次性發送整封郵件給所有收件人，不需併發處理
         /// </summary>
         public async Task SendAsync()
         {
@@ -243,6 +244,16 @@ namespace SGS.OAD.Mail
                 var mailMessage = CreateMailMessage();
                 await Task.Run(() => smtpClient.Send(mailMessage));
             }
+        }
+
+        /// <summary>
+        /// 建立並傳送多封郵件（非同步）
+        /// 發送多封不同的郵件給不同的收件人，使用併發處理提高效能
+        /// </summary>
+        public static async Task SendMultipleAsync(List<Email> emails)
+        {
+            var tasks = emails.Select(email => email.SendAsync()).ToArray();
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
