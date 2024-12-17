@@ -11,26 +11,41 @@ namespace SGS.OAD.Mail
     public class Email
     {
         // SMTP 設定
-        private string _smtpHost = "smtp-apac.sgs.net";
-        private int _smtpPort = 25;
+        private string _smtpHost;
+        private int _smtpPort;
         private string _username;
         private string _password;
-        private bool _enableSsl = true;
+        private bool _enableSsl;
 
         // 郵件相關設定
-        private string _fromEmail = "no-reply@sgs.com";
-        private List<string> _toEmails = new List<string>();
-        private List<string> _ccEmails = new List<string>();
-        private List<string> _bccEmails = new List<string>();
+        private string _fromEmail;
+        private readonly List<string> _toEmails = new();
+        private readonly List<string> _ccEmails = new();
+        private readonly List<string> _bccEmails = new();
         private string _subject;
         private string _body;
         private bool _isHtmlBody;
-        private List<string> _attachmentPaths = new List<string>();
+        private readonly List<string> _attachmentPaths = new();
 
         /// <summary>
         /// 創建郵件構建器的靜態方法
         /// </summary>
-        public static Email Create() => new Email();
+        public static Email Create() => new();
+
+        /// <summary>
+        /// 私有建構子，讀取設定檔、設定預設值
+        /// </summary>
+        private Email()
+        {
+            _smtpHost = ConfigHelper.GetValue("SMTP_HOST");
+            _smtpPort = ConfigHelper.GetValue<int>("SMTP_PORT");
+            _enableSsl = ConfigHelper.GetValue<bool>("SMTP_ENABLE_SSL");
+            _username = ConfigHelper.GetValue("SMTP_USERNAME");
+            _password = ConfigHelper.GetValue("SMTP_PASSWORD");
+            _fromEmail = ConfigHelper.GetValue("MAIL_FROM");
+            _subject = ConfigHelper.GetValue("MAIL_SUBJECT");
+            _body = ConfigHelper.GetValue("MAIL_BODY");
+        }
 
 
         /// <summary>
@@ -86,6 +101,15 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
+        /// 設定多個收件人
+        /// </summary>
+        public Email To(List<string> emails)
+        {
+            _toEmails.AddRange(emails);
+            return this;
+        }
+
+        /// <summary>
         /// 設定副本收件人
         /// </summary>
         public Email Cc(string email)
@@ -104,6 +128,17 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
+        /// 設定多個副本收件人
+        /// </summary>
+        /// <param name="emails"></param>
+        /// <returns></returns>
+        public Email Cc(List<string> emails)
+        {
+            _ccEmails.AddRange(emails);
+            return this;
+        }
+
+        /// <summary>
         /// 設定密送收件人
         /// </summary>
         public Email Bcc(string email)
@@ -116,6 +151,17 @@ namespace SGS.OAD.Mail
         /// 設定多個密送收件人
         /// </summary>
         public Email Bcc(params string[] emails)
+        {
+            _bccEmails.AddRange(emails);
+            return this;
+        }
+
+        /// <summary>
+        /// 設定多個密送收件人
+        /// </summary>
+        /// <param name="emails"></param>
+        /// <returns></returns>
+        public Email Bcc(List<string> emails)
         {
             _bccEmails.AddRange(emails);
             return this;
@@ -161,6 +207,17 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
+        /// 加入多個附件
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <returns></returns>
+        public Email Attach(List<string> filePaths)
+        {
+            _attachmentPaths.AddRange(filePaths);
+            return this;
+        }
+
+        /// <summary>
         /// 建立並傳送郵件（同步）
         /// </summary>
         public void Send()
@@ -194,19 +251,19 @@ namespace SGS.OAD.Mail
         private void ValidateConfiguration()
         {
             if (string.IsNullOrEmpty(_smtpHost))
-                throw new InvalidOperationException("未設定 SMTP 伺服器");
+                throw new InvalidOperationException(ConfigHelper.GetValue("MSG_SMTP"));
 
             if (string.IsNullOrEmpty(_fromEmail))
-                throw new InvalidOperationException("未設定發件人");
+                throw new InvalidOperationException(ConfigHelper.GetValue("MSG_FROM"));
 
             if (_toEmails.Count == 0)
-                throw new InvalidOperationException("未設定收件人");
+                throw new InvalidOperationException(ConfigHelper.GetValue("MSG_TO"));
 
             if (string.IsNullOrEmpty(_subject))
-                throw new InvalidOperationException("未設定郵件主題");
+                throw new InvalidOperationException(ConfigHelper.GetValue("MSG_SUBJECT"));
 
             if (string.IsNullOrEmpty(_body))
-                throw new InvalidOperationException("未設定郵件內容");
+                throw new InvalidOperationException(ConfigHelper.GetValue("MSG_BODY"));
         }
 
         /// <summary>
