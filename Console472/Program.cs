@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SGS.OAD.Mail;
 
 namespace Console472
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            Email.Create()
+                .To("brian.li@sgs.com")
+                .Send();
         }
     }
 }

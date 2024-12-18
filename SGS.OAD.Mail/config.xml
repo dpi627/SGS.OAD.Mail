@@ -3,10 +3,12 @@
   <!-- smtp -->
   <SMTP_HOST>smtp-apac.sgs.net</SMTP_HOST>
   <SMTP_PORT>25</SMTP_PORT>
-  <SMTP_ENABLE_SSL>false</SMTP_ENABLE_SSL>
+  <SMTP_ENABLE_SSL>true</SMTP_ENABLE_SSL>
+  <!-- /smtp -->
+  <!-- credential -->
   <SMTP_USERNAME></SMTP_USERNAME>
   <SMTP_PASSWORD></SMTP_PASSWORD>
-  <!-- /smtp -->
+  <!-- /credential -->
   <!-- mail -->
   <MAIL_FROM>no-reply@sgs.com</MAIL_FROM>
   <MAIL_SUBJECT>測試郵件</MAIL_SUBJECT>

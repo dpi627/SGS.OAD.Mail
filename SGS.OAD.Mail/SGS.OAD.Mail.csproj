@@ -18,7 +18,7 @@
 
 		<!-- NuGet Package Metadata -->
 		<PackageId>SGS.OAD.Mail</PackageId>
-		<Version>24.12.2</Version>
+		<Version>24.12.4</Version>
 		<Authors>Brian</Authors>
 		<Company>SGS Taiwan Ltd.</Company>
 		<Description>SGS OAD Email Sender</Description>

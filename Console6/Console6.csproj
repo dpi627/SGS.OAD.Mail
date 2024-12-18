@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SGS.OAD.Mail" Version="24.12.2" />
+    <PackageReference Include="SGS.OAD.Mail" Version="24.12.4" />
   </ItemGroup>
 
 </Project>

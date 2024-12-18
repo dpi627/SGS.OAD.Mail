@@ -51,15 +51,19 @@ namespace SGS.OAD.Mail
         /// <summary>
         /// 設定 SMTP
         /// </summary>
-        /// <returns>FluentEmailBuilder</returns>
-        public Email UseSmtp(
-            string host,
-            int port,
-            bool enableSsl = false)
+        public Email UseSmtp(string host, int port)
         {
             _smtpHost = host;
             _smtpPort = port;
-            _enableSsl = enableSsl;
+            return this;
+        }
+
+        /// <summary>
+        /// 停用 SSL
+        /// </summary>
+        public Email DisableSSL()
+        {
+            _enableSsl = false;
             return this;
         }
 
@@ -224,11 +228,9 @@ namespace SGS.OAD.Mail
         {
             ValidateConfiguration();
 
-            using (var smtpClient = CreateSmtpClient())
-            {
-                var mailMessage = CreateMailMessage();
-                smtpClient.Send(mailMessage);
-            }
+            using var smtpClient = CreateSmtpClient();
+            var mailMessage = CreateMailMessage();
+            smtpClient.Send(mailMessage);
         }
 
         /// <summary>
@@ -239,11 +241,9 @@ namespace SGS.OAD.Mail
         {
             ValidateConfiguration();
 
-            using (var smtpClient = CreateSmtpClient())
-            {
-                var mailMessage = CreateMailMessage();
-                await Task.Run(() => smtpClient.Send(mailMessage));
-            }
+            using var smtpClient = CreateSmtpClient();
+            var mailMessage = CreateMailMessage();
+            await Task.Run(() => smtpClient.Send(mailMessage));
         }
 
         /// <summary>
