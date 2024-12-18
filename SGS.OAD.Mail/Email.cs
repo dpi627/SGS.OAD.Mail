@@ -47,12 +47,6 @@ namespace SGS.OAD.Mail
             _body = ConfigHelper.GetValue("MAIL_BODY");
         }
 
-        public static void SendTestEmail(string testEmail)
-        {
-            Create().To(testEmail).Send();
-        }
-
-
         /// <summary>
         /// 設定 SMTP
         /// </summary>
