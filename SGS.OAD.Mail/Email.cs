@@ -47,6 +47,11 @@ namespace SGS.OAD.Mail
             _body = ConfigHelper.GetValue("MAIL_BODY");
         }
 
+        public static void SendTestEmail(string testEmail)
+        {
+            Create().To(testEmail).Send();
+        }
+
 
         /// <summary>
         /// 設定 SMTP
@@ -247,7 +252,7 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
-        /// 建立並傳送多封郵件（非同步）
+        /// 建立並傳送多封郵件（非同步併發）
         /// 發送多封不同的郵件給不同的收件人，使用併發處理提高效能
         /// </summary>
         public static async Task SendMultipleAsync(List<Email> emails)
@@ -257,7 +262,21 @@ namespace SGS.OAD.Mail
         }
 
         /// <summary>
-        /// 驗證郵件配置
+        /// 建立並傳送多封郵件（非同步併發），並附帶重試機制
+        /// 發送多封不同的郵件給不同的收件人，使用併發處理提高效能
+        /// </summary>
+        /// <param name="emails">郵件清單</param>
+        /// <param name="maxRetries">最大重試次數，預設3次</param>
+        /// <param name="delayMilliseconds">重試間隔，預設3秒</param>
+        /// <returns></returns>
+        public static async Task SendMultipleWithRetryAsync(List<Email> emails, int maxRetries = 3, int delayMilliseconds = 3000)
+        {
+            var tasks = emails.Select(email => email.SendAsyncWithRetry(maxRetries, delayMilliseconds)).ToArray();
+            await Task.WhenAll(tasks);
+        }
+
+        /// <summary>
+        /// 驗證資料設定
         /// </summary>
         private void ValidateConfiguration()
         {
@@ -319,6 +338,92 @@ namespace SGS.OAD.Mail
                 mailMessage.Attachments.Add(new Attachment(path)));
 
             return mailMessage;
+        }
+
+        /// <summary>
+        /// 帶重試機制的郵件發送（同步）
+        /// </summary>
+        /// <param name="maxRetries">最大重試次數，預設3次</param>
+        /// <param name="delayMilliseconds">重試間隔，預設3秒</param>
+        public void SendWithRetry(
+            int maxRetries = 3,
+            int delayMilliseconds = 3000)
+        {
+            RetryOnFailure(() =>
+            {
+                ValidateConfiguration();
+                using var smtpClient = CreateSmtpClient();
+                var mailMessage = CreateMailMessage();
+                smtpClient.Send(mailMessage);
+            }, maxRetries, delayMilliseconds);
+        }
+
+        /// <summary>
+        /// 帶重試機制的郵件非同步發送
+        /// </summary>
+        /// <param name="maxRetries">最大重試次數，預設3次</param>
+        /// <param name="delayMilliseconds">重試間隔，預設3秒</param>
+        public async Task SendAsyncWithRetry(
+            int maxRetries = 3,
+            int delayMilliseconds = 3000)
+        {
+            await RetryOnFailureAsync(async () =>
+            {
+                ValidateConfiguration();
+                using var smtpClient = CreateSmtpClient();
+                var mailMessage = CreateMailMessage();
+                await Task.Run(() => smtpClient.Send(mailMessage));
+            }, maxRetries, delayMilliseconds);
+        }
+
+        /// <summary>
+        /// 失敗重試
+        /// </summary>
+        private static void RetryOnFailure(
+            Action action,
+            int maxRetries = 3,
+            int delayMilliseconds = 10000)
+        {
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                try
+                {
+                    action();
+                    return;
+                }
+                catch
+                {
+                    if (attempt == maxRetries)
+                        throw;
+
+                    Thread.Sleep(delayMilliseconds);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 失敗重試(非同步)
+        /// </summary>
+        private static async Task RetryOnFailureAsync(
+            Func<Task> action,
+            int maxRetries = 3,
+            int delayMilliseconds = 10000)
+        {
+            for (int attempt = 1; attempt <= maxRetries; attempt++)
+            {
+                try
+                {
+                    await action();
+                    return;
+                }
+                catch
+                {
+                    if (attempt == maxRetries)
+                        throw;
+
+                    await Task.Delay(delayMilliseconds);
+                }
+            }
         }
     }
 }
