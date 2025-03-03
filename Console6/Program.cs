@@ -7,7 +7,7 @@ namespace Console6
         static void Main(string[] args)
         {
             var mail = Email.Create()
-                //.WithCredentials(@"APAC\brian_li", "2024SGSsgs$$$")
+                //.WithCredentials(@"APAC\brian_li", "******")
                 //.From("brian_li@sgs.com") //預設 no-reply@sgs.com
                 .To("brian.li@sgs.com") //"brian_li@sgs.com", "amy.hu@sgs.com"
                 //.Cc("brian.li.sgs@gmail.com")
